@@ -1,0 +1,28 @@
+//E-CLOSURE
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STATES 4
+
+int epsilon[MAX_STATES][MAX_STATES] = { {0, 1, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 0, 0, 0} };
+int transition0[MAX_STATES][MAX_STATES] = { {0} };
+int transition1[MAX_STATES][MAX_STATES] = { {0} };
+int closure[MAX_STATES];
+
+void find_epsilon_closure(int state) {
+    closure[state] = 1;
+    for (int next = 0; next < MAX_STATES; next++) {
+        if (epsilon[state][next] && !closure[next]) find_epsilon_closure(next);
+    }
+}
+
+int main() {
+    for (int i = 0; i < MAX_STATES; i++) {
+        memset(closure, 0, sizeof(closure));
+        find_epsilon_closure(i);
+        printf("e-closure of q%d: ", i);
+        for (int j = 0; j < MAX_STATES; j++) if (closure[j]) printf("q%d ", j);
+        printf("\n");
+    }
+    return 0;
+}
